@@ -1,0 +1,99 @@
+#Search for images
+podman search ubi
+podman search suse
+
+#To pull a container. This does not run it
+podman pull ubi9/ubi
+
+#To list for all downloaded images
+podman images
+
+#To remove an image
+podman rmi "image_id"
+
+#To start a container directly from an image ... -d detached mode  ... -it interactive mode
+podman run --name georgem "image_id"
+
+#To save an image as a tar
+podman save  -o image_xyz.tar "image_id"
+
+#To add a tagg to an image
+podman tag docker.io/library/ubuntu  localhost:5000/docker.io/library/ubuntu:testingtags
+
+#Save image on your machine
+podman save -o mydb.tar docker.io/library/mariadb:latest
+
+#Load Image on your repo
+podman load -i mydb.tar
+
+###INSPECT AN IMAGE
+#inspect an image. Take note of the tags presented.
+skopeo  inspect  docker://docker.io/library/httpd
+
+#A default pull with pull the image with the "latest" tag in it.
+#Below is the command to pull an image with a specific tag
+podman pull docker.io/library/httpd:2.4.50
+
+#Below you will inspect the image with the specific tag
+podman inspect docker.io/library/httpd:2.4.5
+
+#To provide a specific tag on a container
+podman tag docker.io/library/httpd:latest lolers:v1000
+
+#To get all tags with curl
+tmp]$ curl https://registry.fedoraproject.org/v2/fedora/tags/list | python3 -m json.tool
+
+#To perfom a diff of your running container against the container image it self
+podman diff "name_of_your_container"
+
+
+##Create/delete/start/stop Containers
+
+#To show all containers, even none running
+podman ps -a
+
+#To show only running containers
+podman ps
+
+#To build a container from an image
+podman create --name=dbase 4a632f970181
+
+#To remove a container
+podman rm "name"
+
+#To start a container
+podman start "container_name"
+
+#To Stop a  container
+podman stop "container_name"
+
+#To execute a command on a container
+podman exec -it myimagename bash
+
+#To start a container and to make sure it will autoclean it self after it stops.
+#-d deatched mode .... -it interactive mode
+podman run --rm --name=georgem nginx   
+
+#View differences between containers
+podman diff docker.io/library/nginx:latest web1
+podman diff container1 container2
+Containers and networking
+
+#To create a container and pair ports between the container and the guest OS
+ podman create --name=web5 -p 192.168.1.128:8080:80 nginx
+ 
+ firewall-cmd --add-port 8080/tcp --permanent
+ 
+ firewalld-cmd reload
+
+
+##Containers and environmental variables
+
+#To start a container by passing variables
+podman  run -d -e MYSQL_ROOT_PASSWORD='zxc' -e  MYSQL_PASSWORD='zxc' -e MYSQL_DATABASE=db1 -e MYSQL_USER=ansible -p 3306:3306 mariadb
+
+
+##Podman and Storage
+
+#Create a container that uses local storage under /opt/dbfiles. 
+podman  run -d  -v /opt/dbfiles:/var/lib/mysql:Z -e MYSQL_ROOT_PASSWORD='zxc' -e  MYSQL_PASSWORD='zxc' -e MYSQL_DATABASE=db1 -e MYSQL_USER=ansible -p 3306:3306 mariadb 

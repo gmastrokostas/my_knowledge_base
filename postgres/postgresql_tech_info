@@ -1,0 +1,21 @@
+#Template Databases 
+A newly created database is cloned by default by template1.
+Templates contain views, functions etc which is part of the system catalog.
+There are two templates. Template 1 and 0
+
+#User Databases
+Every database has an owner aka role  and a set of permissions associated with that role.
+
+#Roles
+Roles belong to the cluster and not to a specific database.
+A role can either be a user or a group.
+A role can be part of another role
+
+#Tablespace
+Is the storage location for the database.
+
+#Schemas
+Contains tables, views, functions etc. 
+By default there is schema called public in the template1 database.
+As a result when a new database is created it also contains by default the public schema.
+

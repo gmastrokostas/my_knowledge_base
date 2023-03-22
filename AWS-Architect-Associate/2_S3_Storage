@@ -1,0 +1,41 @@
+S3 - Bucket Naming Convention
+
+- Each name for each S3 bucket is globally universally unique.
+
+- Example of URL format:
+	https://gmastrokostas.s3.RegionofAWS.com/name_file.txt
+
+- S3 works off a key-Value-Store
+  - key: koukla.png
+  - value: This is a the data it self (bytes)
+  - VersionID: Storing multiplpe versions of the same object
+  - Metadata: Data about the data you are storing, type, time modified etc
+
+- The data is stored across multiple devices in multiple facilities/datacenters. Max size of files is 5TB
+
+- S3 STANDARD
+	HA and Durability
+	Designed for frequent access
+	Suitable for most workloads like ebsites/mobile/gaming apps/big data analytics/content distribution
+
+
+- TIERED S3 STORAGE
+
+
+
+- LIFECYCLE MANAGEMENT: Automatic transition of files to a cheaper tier storage or simply delete old files
+
+
+
+- VERSIONING: All versions of an object are stored and can be retrieved including deleted objects
+
+
+
+- SECURING DATA
+	- Server side encryption. Encypt all files on your bucket
+	- ACLs defining which accounts/groups have acces to what files
+	- Bucket Policies. What is allowed to be done on that bucket overall. Add only, Read only etc
+
+- Speed of changes reflected on S3 buckets.
+	Any PUT/write events are available right away.
+    

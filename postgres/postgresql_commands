@@ -1,0 +1,23 @@
+#HOT GENERATE A SCHEMA ONLY DATADUMP AND THEN RESTORE IT
+#Create the schema dump
+pg_dump -s -d serverdata > schema_only.sql
+
+#Restore the schema
+psql -d serverdata < schema_only.sql
+
+#-------------------------------------------------
+
+#HOW TO CREATE A DATADUMP -- full data 
+#create a datadump
+pg_dump --data-only -d serverdata  -f data_only
+
+
+#-----------------------------------------------
+#Import data from a CSV file. For this you will need to
+
+#execute this while logged in the database.
+#This assumed your CSV file does not have headers
+copy servers   from '/home/seeker/server_data_collector/servers/centos1/var/tmp/servers.csv' DELIMITER '|';
+
+#Using the command line with out logging to the server to perform the import from a CSV file
+psql -c "\copy servers from 'servers.csv' DELIMITER '|'" -d serverdata

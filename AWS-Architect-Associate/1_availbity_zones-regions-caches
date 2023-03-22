@@ -1,0 +1,81 @@
+#Components consisting of the AWS Global Infrastructure
+
+- Availability Zones
+Physical Datacenters of AWS. Compute, Storage, Network and database resources are hosted within a Virtual Private Cloud (VPC).
+Multiple datacenters can form a single availability zone. 
+Each AZ will always have at least one other AZ closely located.
+These AZ are seperated in terms of power and network connectevity.
+Data is replicated for HA and reilience purposes. Using multiple AZs within a region ensures a HA environment. 
+
+
+- Regions
+As a result of the above information, a Region is a collection of AZs closely located. 
+Each region will act independently of other regions and each region will contain at least two AZs.
+
+Thus it makes sense to use regions close to your customer base to ensure low latency response times.
+Also from a regulatory standpoint your data may not be allowed to cross a specific geographical region.
+
+You can also use Regions the same way you can use AZs in terms of creating HA across regions.
+
+Not all AWS services are available to every region.
+Some services are "global services" which means they are not tied to a specific region but other AWS services may not be
+
+- Edge Locations
+These are not used to deploy your main infrastructure.
+They are used by end users who are accessing the main services. 
+A user may accessing services from Asia which are located in in the Ohio region.
+The data will be accessed by an edge location closer to the US. 
+
+- Regional Edge Caches
+These sit between a main infrastructure and the edge locations.
+The regional edge caches have a larger sized cache than the individual edge locations.
+This means data is retained for a longer time.
+
+When data is requested by edge locations which is no longer available then the data can be retreived by the regional edge caches. 
+The catch is the latency is higher than it is with the Edge Locations
+
+
+#####
+-PLACEMENT GROUPS
+
+- Cluster Group.
+Grouping of instances with in a single AZ.
+Often times on the same rack.
+Often times on the same server.
+All nodes communicate at 10Gpbs
+
+- Partition Placement Group.
+Instances are grouped in partitions and run in one AZ
+The instances are divided into logical segments aka partitions.
+Each parition is its own rack and network.
+You can have up to 7 partitions per AZ.
+ 
+            AZ
+------------------------
+PART1    PART2    PART3
+RACK     RACK     RACK
+-----    ----     ----
+ EC2      EC2      EC2
+ EC2      EC2      EC2
+ EC2      EC2      EC2
+
+
+
+-Spread Placement Group
+They span over multiple AZs
+Instances are spread across racks.
+You can have 7 instances per AZ per placement group
+
+ AZ     AZ    AZ
+-----  ----  ----
+RACK   RACK  RACK
+EC2    EC2   EC2
+
+RACK   RACK  RACK
+EC2    EC2   EC2
+
+
+
+
+
+-
