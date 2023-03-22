@@ -1,0 +1,4 @@
+#View which NUMA node belongs to what NUMA domain
+/sys/devices/system/node/node[0-9]/cpulist
+
+

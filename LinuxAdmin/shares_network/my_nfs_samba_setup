@@ -1,0 +1,50 @@
+###ALL CONFIGS FOR HPV1 NFS
+#NFS Setup files
+
+#RPMS On the server side
+nfs-server nfs-utils rpcbind
+
+#Contents of /etc/exports
+/hpv1_storage/nfs_share/isos	192.168.1.8(rw,sync,no_subtree_check)
+/hpv1_storage/nfs_share/	 192.168.1.12(rw,sync,no_subtree_check)
+/hpv1_storage/nfs_share/test_dir 192.168.1.8/26(rw,sync,no_subtree_check)
+
+stat /hpv1_storage/
+Access: (0755/drwxr-xr-x)  Uid: (    0/    root)   Gid: (    0/    root)
+
+stat /hpv1_storage/nfs_share/
+Access: (0755/drwxr-xr-x)  Uid: (65534/  nobody)   Gid: (65534/  nobody)
+
+#Client fstab entry for NFS
+192.168.1.4:/hpv1_storage/nfs_share	  /var/hpv1_nfs	  nfs	  defaults,_netdev,nolock,intr,timeo=60	0 0
+#RPMs on the client side
+nfs-server nfs-utils
+
+#SAMBA CONFIG
+[global]
+	workgroup = WORKGROUP
+	security = user
+
+	passdb backend = tdbsam
+
+	printing = cups
+	printcap name = cups
+	load printers = yes
+	cups options = raw
+[hpv1_samba]
+	path=/hpv1_storage/samba_share/
+	guest ok = no
+	valid users = @admin
+	writable = yes
+	browsable = yes
+	public = no
+
+#SAMBA SELINUX FCONTEXTS AND BOOLEANS
+  ls -lz / | grep hpv1
+  drwxr-xr-x.   5 root root system_u:object_r:samba_share_t:s0   83 Oct 20 16:16 hpv1_storage
+  ls -lZ /hpv1_storage/
+  root   admin  unconfined_u:object_r:samba_share_t:s0  86 Oct 24 21:38 samba_share
+  
+  samba_export_all_ro            (on   ,   on)  Allow samba to export all ro
+  samba_export_all_rw            (on   ,   on)  Allow samba to export all rw
+

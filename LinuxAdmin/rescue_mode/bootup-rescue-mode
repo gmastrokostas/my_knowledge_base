@@ -1,0 +1,7 @@
+#### Stop Boot process
+When GRUB appears press "e"
+At the end of the kernel line enter "rd.break"
+Press "cntrl+x"
+On safe mode mount sysroot "mount -o remount,rw /sysroot/"
+Once you are done cd /; touch .autorelabel; exit;
+

@@ -1,0 +1,85 @@
+#STEP 1)
+#CREATE FOLLOWING DIRECTORIES
+##FOR YOUR CONFIG FILES
+mkdir /etc/httpd/sites_available /etc/httpd/sites_enabled
+
+#LOCATION OF YOUR WEB SITES
+#ALL OF THEM HAVE TO HAVE 755 PRMISSIONS AND OWNER:GROUP ROOT
+mkdir /content/web_sites/example2.com/public_html/ 
+mkdir /content/nfs_httpd/example3.com/logs
+####
+mkdir /content/nfs_httpd/example3.com/public_html/
+mdkir /content/nfs_httpd/example3.com/logs/
+
+#ADJUST SELINUX
+semanage fcontext -a -t httpd_sys_content_t "/content/web_sites(/.*)?"
+semanage fcontext -a -t httpd_log_t "/content/web_sites/logs(/.*)?"
+semanage fcontext -a -t httpd_sys_content_t "/content/nfs_httpd(/.*)?"
+semanage fcontext -a -t httpd_log_t  "/content/nfs_httpd/logs(/.*)?"
+restorecon -R -v /content/web_sites/
+restorecon -R -v /content/nfs_httpd/
+
+#FOR NFS ON THE CLIENT MACHINE YOU NEED TO ENABLE NFS_HTTP BOOLEAN
+setsebool -P httpd_use_nfs 1
+
+
+#STEP 2)
+#INSERT THE FOLLOWING LINES AT THE BOOTOM of your /etc/httpd/conf/httpd.conf
+
+#2a)This is were your soft links are located for each virtual host/site
+IncludeOptional sites_enabled/*.conf
+
+#2b) If your web content is located in the none default locations
+#You will have to create an entry for each location.
+#Example - (Example: insert following at bottom of your /etc/httpd/conf/httpd.conf )
+<Directory /content/web_sites>
+        Options Indexes FollowSymLinks
+        AllowOverride None
+        Require all granted
+</Directory>
+
+<Directory /content/nfs_httpd>
+        Options Indexes FollowSymLinks
+        AllowOverride None
+        Require all granted
+</Directory>
+##################################################################################
+
+
+
+
+##################################################################################
+
+#STEP 3)
+#CREATE YOUR VIRTUAL HOST CONFIG
+#ONE FOR YOUR NFS 
+vi /etc/httpd/sites_available/example3.com.conf  and /etc/httpd/sites_available/example2.com.conf
+#With following contents
+<VirtualHost *:80>
+        ServerName example3.com
+        ServerAlias www.example2.com
+        DocumentRoot /content/nfs_httpd/example3.com/public_html
+        ErrorLog /content/nfs_httpd/example3.com/logs/error.log
+        CustomLog /content/nfs_httpd/example3.com/logs/access.log combined
+
+</VirtualHost>
+
+#ANOTHER FOR SAME SERVER BUT NONE DEFAULT LOCATION
+<VirtualHost *:80>
+        ServerName example2.com
+        ServerAlias www.example2.com
+        DocumentRoot /content/web_sites/example2.com/public_html/
+        ErrorLog /content/web_sites/site_1.com/logs/error.log
+        CustomLog /content/web_sites/site_1.com/logs/access.log combined
+</VirtualHost>
+
+#LINK YOUR CONFIGS TO THE SITES_ENABLED DIR
+ln -s /etc/httpd/sites_available/example3.com.conf  /etc/httpd/sites_enabled/example3.com.conf
+ln -s /etc/httpd/sites_available/example2.com.conf  /etc/httpd/sites_enabled/example2.com.conf
+##################################################################################
+
+
+
+
+
+

@@ -1,0 +1,11 @@
+#View all system calls
+strace -c ls
+
+#Do a trace on a network related call
+strace -e trace=network tracepath 8.8.8.8
+
+#View time stamps for each system call
+strace -r -t df
+
+#View how much time was spent on each system call
+strace -r -T df

@@ -1,0 +1,22 @@
+#PS command. Use --format to display specific fields.
+#Example
+ps -aN   --format cmd,pid,user,size,rss,time,cp,%mem,%cpu,machine,maj_flt,psr
+
+#MEMORY OVERCOMMIT
+#Setup overcommit
+vm.overcommit_memory
+
+0: Default. Accepts OO unless its a crazy high number.
+1: Always OO
+2: Ratio based OO based on available RAM + SWAP
+
+#Enable OOM killer. It kills processes to free memory.
+vm.panic_on_oom=1
+
+#Each process has an OOM score. The lower the score the lower the chances
+of a process being killed.
+/proc/PID/oom_score
+#You can mannually adjust the OOM score by editing
+/proc/PID/oom_score_adj
+
+

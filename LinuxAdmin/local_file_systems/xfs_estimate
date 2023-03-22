@@ -1,0 +1,4 @@
+#Estimate the size an XFS will take.  xfs_estimate estimates the space that directory would take if it were copied to an XFS filesystem. xfs_estimate does not cross mount points
+
+xfs_estimate  /
+

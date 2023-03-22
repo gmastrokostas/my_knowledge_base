@@ -1,0 +1,86 @@
+/> ls
+o- / ................................................................................................ [...]
+  o- backstores ..................................................................................... [...]
+  | o- block ......................................................................... [Storage Objects: 2]
+  | | o- block_lun_1 ........................... [/dev/mapper/v_lun1-l_lun1 (19.0GiB) write-thru activated]
+  | | | o- alua .......................................................................... [ALUA Groups: 1]
+  | | |   o- default_tg_pt_gp .............................................. [ALUA state: Active/optimized]
+  | | o- block_lun_2 ........................... [/dev/mapper/v_lun2-l_lun2 (19.0GiB) write-thru activated]
+  | |   o- alua .......................................................................... [ALUA Groups: 1]
+  | |     o- default_tg_pt_gp .............................................. [ALUA state: Active/optimized]
+  | o- fileio ........................................................................ [Storage Objects: 0]
+  | o- pscsi ......................................................................... [Storage Objects: 0]
+  | o- ramdisk ....................................................................... [Storage Objects: 0]
+  o- iscsi ................................................................................... [Targets: 1]
+  | o- iqn.2003-01.org.linux-iscsi.main.x8664:sn.3104252aa87d ................................... [TPGs: 1]
+  |   o- tpg1 ...................................................................... [no-gen-acls, no-auth]
+  |     o- acls ................................................................................. [ACLs: 1]
+  |     | o- iqn.1994-05.com.redhat:cdd125d85a5 .......................................... [Mapped LUNs: 2]
+  |     |   o- mapped_lun0 .................................................. [lun0 block/block_lun_1 (rw)]
+  |     |   o- mapped_lun1 .................................................. [lun1 block/block_lun_2 (rw)]
+  |     o- luns ................................................................................. [LUNs: 2]
+  |     | o- lun0 ...................... [block/block_lun_1 (/dev/mapper/v_lun1-l_lun1) (default_tg_pt_gp)]
+  |     | o- lun1 ...................... [block/block_lun_2 (/dev/mapper/v_lun2-l_lun2) (default_tg_pt_gp)]
+  |     o- portals ........................................................................... [Portals: 1]
+  |       o- 0.0.0.0:3260 ............................................................................ [OK]
+  o- loopback ................................................................................ [Targets: 0]
+
+#Instructions
+1) Create a partition, LVM or a traditional one
+
+2) Launch targetcli and create a backstore type
+  targetcli; cd /backstores/block; \
+  create dev=/dev/mapper/v_lun-1-l_lun1 name=block_lun_1
+  create dev=/dev/mapper/v_lun-2-l_lun2 name=block_lun_2
+
+3) Create a iSCSI qualified name, aka IQN. You can create multiple IQNs if you want to create multiple seperate targets.
+   cd /iscsi; create; #It will automatically generate a name for you. 
+
+4) Create the actual ACL. This entry is found in the initiator machine (aka client). This acl entry tells which initiator (client) is allowed to access the pool of iSCSI drives. You can multiple entries here for multiple initiators (clients)  
+
+   cd /iscsi/iqnxxxxx/tpg1/acls; create "the iqn number from the client machine"
+
+5) Create the lun, aka logical unit number.
+   cd /iscsi/iqnxxxxxx/tpg1/luns/ 
+    create /backstores/block/"to_the_block_you_created_above"
+
+6) Discover remote targets
+iscsiadm --m discovery -type sendtargets –-p 192.168.1.28 --discover
+or
+scsiadm --mode discovery --type sendtargets --portal 192.168.1.28 --discover
+#To get more information post discovery
+iscsiadm --mode discovery -P 1
+
+7) To add a remote target
+
+iscsiadm -m discoverydb -t sendtargets -p 192.168.1.28:3260  -o new
+
+8) Connect/Login to remote target
+
+iscsiadm --mode node --targetname iqn.2003-01.org.linux-iscsi.main.x8664:sn.3104252aa87d --portal 192.168.1.28:3260 --login
+
+#Get more information after a connection
+iscsiadm --mode node -P 1
+
+
+9)To log out
+iscsiadm --mode node --targetname iqn.2003-01.org.linux-iscsi.main.x8664:sn.3104252aa87d  --logout.  
+
+10) To delete a remote target
+
+iscsiadm -m discoverydb -t sendtargets -p 192.168.1.28:3260  -o delete
+#or
+iscsiadm --mode node --targetname iqn.2003-01.org.linux-iscsi.main.x8664:sn.3104252aa87d  --op=delete
+
+
+#FYI
+
+#Show iscsi available iscsi disks
+lsscsi
+
+#To ensure that an iSCSI mount is configured persistently, put an entry in /etc/fstab that looks like this: 
+UUID-XXXXXXXX-XXXX-XXXX-XXXXXXXX /iscsi       xfs     _netdev   0 2
+
+
+
+

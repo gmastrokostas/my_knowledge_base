@@ -1,0 +1,11 @@
+#First freeze OR unmount you fs
+xfs_freeze -f   /dev/mapper/xfs_testing-xfs_1 
+umount /xfs_1 /xfs_2
+
+#Then clone it
+xfs_copy -d /dev/mapper/xfs_testing-xfs_1 /dev/mapper/xfs_testing-xfs_2
+
+#Unfreeze your FS OR mount it again
+xfs_freeze -f   /dev/mapper/xfs_testing-xfs_1
+mount /xfs_1 /xfs_2
+

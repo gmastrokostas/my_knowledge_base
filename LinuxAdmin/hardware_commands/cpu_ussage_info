@@ -1,0 +1,6 @@
+#Get general cpu info 
+lscpu
+
+#Get analysis for CPU cache usage.
+valgrind --leak-check=yes application.bin arg1 arg2
+valgrind --tool=cachegrind ls

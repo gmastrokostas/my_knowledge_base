@@ -1,0 +1,73 @@
+#The document here does the following:
+# - Shows the NUMA layout so you can determine which CPU's belong to which NUMA node.
+# - Identify the process you want to use CPU affinity on
+
+#############################################
+#To view breakdown of NUMA nodes and Sockets/CPUs
+numactl --hardware
+
+
+#############################################
+#Get PIDs for process
+
+pidof httpd 
+
+#############################################
+#Get context switching info for process.
+tuna -t httpd -P  
+##Output- This show that httpd can use all 4 CPUs.
+                    thread       ctxt_switches
+    pid SCHED_ rtpri affinity voluntary nonvoluntary             cmd
+  5187   OTHER     0  0,1,2,3        13            1           httpd
+  5188   OTHER     0  0,1,2,3         5            0           httpd
+  5189   OTHER     0  0,1,2,3         6            0           httpd
+  5190   OTHER     0  0,1,2,3         5            0           httpd
+  5191   OTHER     0  0,1,2,3         5            0           httpd
+
+
+#############################################
+#Get specific switching data for child process.
+#The following will not show on which CPU the specific PID is running on.
+pidstat -w -p 4735 
+##Output
+02:36:09 PM   UID       PID   cswch/s nvcswch/s  Command
+02:36:09 PM     0      5187      0.00      0.00  httpd
+
+
+#############################################
+#Get overall system data for switching
+vmstat -w 1 
+##Output
+procs -----------------------memory---------------------- ---swap-- -----io---- -system-- --------cpu--------
+ r  b         swpd         free         buff        cache   si   so    bi    bo   in   cs  us  sy  id  wa  st
+ 2  0        20992       160508         1044       324212    0    0    11     5   47   60   0   0 100   0   0
+ 0  0        20992       160380         1044       324236    0    0     0     0  276  352   0   0  99   0   0
+ 1  0        20992       160288         1044       324240    0    0     0     0  241  342   0   1  99   0   0
+
+
+#############################################
+#another way to get switching 
+time -v "command"
+
+#Get context switching from process in the proc directory.
+cat /proc/4735/status
+
+
+#Find on what CPUs a process is pinnded.
+ taskset -pc 4735
+
+
+
+
+#############################################
+#HOW TO SETUP CPU AFFINITY USING TUNA       #
+#############################################
+#This example assumes you want to setup httpd
+
+cd /etc/systemc/system
+mkdir httpd.service
+cd httpd.service
+vi httpd_cpu_affinity.conf #insert following to pin it on CPU 0
+[Service]
+CPUAffinity=0
+

@@ -1,0 +1,23 @@
+#DHCP.CONF
+# line 10: specify domain name
+option domain-name "sfentona.lol";
+# line 11: specify nameserver's hostname or IP address
+#option 192.168.1.1;
+# line 24: uncomment
+authoritative;
+# add to the end
+# specify network address and subnet-mask
+subnet 192.168.1.0 netmask 255.255.255.192 {
+    # specify default gateway
+    option routers 192.168.1.1;
+    # specify subnet-mask
+    option subnet-mask 255.255.255.192;
+    # specify the range of leased IP address
+    range dynamic-bootp 192.168.1.2 192.168.1.60;
+}
+
+##########
+/etc/default/isc-dhcp-server
+INTERFACESv4="br0"
+INTERFACESv6=""
+

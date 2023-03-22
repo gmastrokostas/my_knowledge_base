@@ -1,0 +1,22 @@
+#SolarFlare Licenses
+#View installed licenses
+skey -ra
+
+#Install license
+sfkey --backup all  > var/tmp/sfkey_backup
+sfkey --adapter p4p1 --install /var/tmp/tex_file_with_license.txt
+
+
+
+#######sfutils##############
+#Check current version of firmware
+sfupdate
+
+#Update firmware
+sfupdate --write --force --yes
+
+#Rollback version using dat files
+sfupdate --write --force --yes --image=/var/tmp/BOOTROM or UEFI or MCPU
+
+#Install a specific version of firmware to a specific interface
+sfupdate --write --force --yes --image=/var/tmp/BOOTROM --adapter=p2p1

@@ -1,0 +1,7 @@
+#Get file fragmentation data. The first -r ensures drive is on read only mode.
+Second -r is part of the -c command (frag/freesp/fsmap..etc) and it process realtime file data.
+
+xfs_db -r -c frag -r /dev/mapper/xfs_testing-xfs_1
+
+#Defrag xfs filesystem
+xfs_fsr #you can specify the location as well

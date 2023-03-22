@@ -1,0 +1,3 @@
+ssh hostname -l Administrator
+#and type
+vsp

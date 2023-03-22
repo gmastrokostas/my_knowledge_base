@@ -1,0 +1,26 @@
+#Types of Scheduler modes
+- Random scheduling (RSS)
+- First In, First Out (FIFO), also known as First Come First Served (FCFS)
+- Last In, First Out (LIFO)
+- Shortest seek first, also known as Shortest Seek / Service Time First (SSTF)
+- Elevator algorithm, also known as SCAN (including its variants, C-SCAN, LOOK, and C-LOOK)
+- N-Step-SCAN SCAN of N records at a time
+- FSCAN, N-Step-SCAN where N equals queue size at start of the SCAN cycle
+- Completely Fair Queuing (CFQ) on Linux
+- Anticipatory scheduling
+- Noop scheduler
+- Deadline scheduler
+- mClock scheduler[2]
+- Budget Fair Queueing (BFQ) scheduler.[3][4]
+- Kyber[5][6]
+- NONE (used for NVM Express drives)
+- mq-deadline (used for SSD SATA drives)
+- cfq bfq and bfq-mq (used for HDD drives)
+
+#To view current I/O Scheduler mode
+cat /sys/block/sda/queue/scheduler
+
+#To change the scheduler mode - Non Persistent
+echo cfg >  /sys/block/sda/queue/scheduler
+
+

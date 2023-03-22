@@ -1,0 +1,39 @@
+#Create a team by importing a json file
+nmcli connection add type team con-name team0 ifname team0 config team0.json ip4 192.168.1.46/26 gw4 192.168.1.1
+
+#json file -- team0.json
+{"runner":{"active": true,"fast_rate": true,"name": "loadbalancing","tx_hash": [ "eth", "ipv4" ]},"tx_balancer": { "name": "basic" },"link_watch": { "name": "ethtool" }}
+
+#Assign an IP to a NIC
+nmcli connection add type ethernet con-name enp2s0  ifname enp2s0 ip4 192.168.1.47/26
+
+
+###THIS WORKS GREAT FOR THE TEAM SETUP
+nmcli connection delete team2 team1 team0 bridge0 team-slave-enp10s0 team-slave-enp7s0 team-slave-enp8s0 team-slave-enp9s0
+ip address delete 192.168.1.104/24 dev bridge0
+ip address delete 192.168.1.200/24 dev team1
+ip address delete 192.168.2.200/24 dev team0
+ip address delete 192.168.1.200/24 dev team0
+ip address delete 192.168.2.200/24 dev team1
+
+nmcli connection add type team con-name team0 ifname team0 ipv4.method manual  autoconnect yes ipv4.addresses 192.168.2.200/24 ipv4.gateway 192.168.2.1 ipv4.routes "192.168.2.1/24 192.168.2.1"
+nmcli connection add type team-slave ifname enp7s0 master team0
+nmcli connection add type team-slave ifname enp8s0 master team0
+nmcli connection down team0; nmcli connection up team0
+#---------------------------------------------------
+nmcli connection add type team con-name team1 ifname team1 ipv4.method manual  autoconnect yes ipv4.addresses 192.168.1.200/24 ipv4.gateway 192.168.1.1 ipv4.routes "192.168.1.1/24 192.168.1.1"
+nmcli connection add type team-slave ifname enp9s0 master team1
+nmcli connection add type team-slave ifname enp10s0 master team1
+nmcli connection down team1; nmcli connection up team1
+#--------------------------------------------------
+nmcli connection modify team1 ipv4.never-default true
+nmcli connection modify team0 ipv4.never-default true
+
+reboot
+#####################################################################
+
+nmcli connection delete enp0s31f6  enp5s0 bridge0
+nmcli connection add type ethernet con-name enp5s0 ifname enp5s0 ipv4.method static autoconnect yes ipv4.addresses  192.168.1.149/24 ipv4.gateway 192.168.1.1 ipv4.routes  "192.168.1.149/24 192.168.1.1"  ipv4.dns 192.168.1.1,8.8.8.8
+nmcli connection add type ethernet con-name enp0s31f6 ifname enp0s31f6  ipv4.method static autoconnect yes ipv4.addresses  192.168.2.149/24 ipv4.gateway 192.168.2.1 ipv4.routes  "192.168.2.149/24 192.168.2.1"  ipv4.never-default true ipv4.dns  192.168.2.1
+
+

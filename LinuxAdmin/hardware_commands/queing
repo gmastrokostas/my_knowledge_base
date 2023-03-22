@@ -1,0 +1,5 @@
+Queue length = average arrival x average wait time
+wait time = service time(time process spends on CPU)  + queue time
+
+Throughput - It is determined by the slowest part of a system
+

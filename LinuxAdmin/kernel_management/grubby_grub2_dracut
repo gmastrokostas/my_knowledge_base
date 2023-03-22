@@ -1,0 +1,37 @@
+#GRUBBY
+#List info for all kernels with grubby
+grubby --info=ALL
+
+#List info for a specific kernel
+grubby --info /boot/vmlinuz-$(uname -r)
+
+#View default kernel
+grubby --default-kernel
+
+#View index number for kernel
+grubby --default-index
+
+#Remove or Add kernel args with grubby
+grubby --remove-args="quiet"  --update-kernel=/boot/vmlinuz-$(uname -r)
+grubby --update-kernel="quiet"  --update-kernel=/boot/vmlinuz-$(uname -r) 
+grubby --update-kernel=/boot/vmlinuz-$(uname -r) --args="ipv6.disable=1"
+
+#GRUB2-
+#File of interest
+/etc/default/grub
+#Once changes are completed run
+grub2-mkconfig -o /boot/grub2/grub.cfg
+
+
+#DIFFERENCES IN EFI Vs LEGACY REDHAT 7
+#EFI  RH7 does not have string "menuentry" in following file.
+#Which means you cannot grep for order of booting
+/boot/grub2/grub.cfg
+
+#DIFFERENCE BETWEEN REDHAT7 AND REDHAT8
+#Following does not exist in RedHat7
+/boot/loader/entries/
+
+
+
+

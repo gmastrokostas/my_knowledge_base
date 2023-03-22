@@ -1,0 +1,11 @@
+In the proc dir we have the
+ - PID directories
+ - info files 
+ - sys is about tunables. The most important info here are the following directories
+   	fs - kernel - net - vm
+
+SYSCTL -- config file is /etc/sysctl.conf
+default definitions of parameters are stored in /usr/lib/sysctl.d/
+Runtime parameters exist in /run/sysctl.d/
+Custom settings are located in /etc/sysctl./d
+   	

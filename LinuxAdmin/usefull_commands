@@ -1,0 +1,6 @@
+#Make ps look prety
+ps -eo user,pid,%cpu,%mem,cmd,stime | grep bash
+
+#Check open deleted files
+lsof +L1
+
