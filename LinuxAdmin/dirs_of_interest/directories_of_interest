@@ -1,0 +1,46 @@
+CPU Related 
+/sys/devices/system/cpu/isolated 
+/sys/devices/system/cpu/online 
+/sys/devices/system/cpu/present 
+/sys/devices/system/cpu/smt/active 
+/sys/devices/system/cpu/smt/supported 
+/sys/devices/system/cpu/cpu0/node0 
+
+ 
+
+NIC related 
+/sys/class/net/"IF-Name"/ifindex 
+/sys/class/net/"IF-Name"/mtu 
+/sys/class/net/"IF-Name"/operstate 
+/sys/class/net/"IF-Name"/speed 
+/sys/class/net/"IF-Name/device/label 
+/sys/class/net/"IF-Name/device/max_link_speed 
+/sys/class/net/"IF-Name/device/numa_node 
+
+ 
+
+LVM Related 
+/sys/block/dm-*/slaves/sda* 
+/sys/block/dm-*/slaves/sda*/ro 
+/sys/block/dm-*/slaves/sda*/size 
+
+ 
+
+BOND/TEAM related 
+bond: 
+/proc/net/bonding/bond1 
+
+team: 
+teamdctl team1 state 
+
+ 
+
+systemd related 
+
+/usr/lib/systemd/system/ 
+ 
+/run/systemd/system/ 
+ 
+/etc/systemd/system/ 
+ 
+/etc/systemd/system/multi-user.target.wants 
