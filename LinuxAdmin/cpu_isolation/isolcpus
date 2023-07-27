@@ -1,0 +1,16 @@
+Isolate CPUs with grubby 
+Grubby is a command line tool which allows you to manipulate your grub bootloader. More about this can be found here 
+
+#To isolate CPUs 
+ 
+
+grubby --args="isolcpus=2-4" --update-kernel=ALL 
+reboot 
+
+ 
+
+ 
+#To revert change 
+
+grubby --remove-args="isolcpus=2-4" --update-kernel=ALL 
+reboot 

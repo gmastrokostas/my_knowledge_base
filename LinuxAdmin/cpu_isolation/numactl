@@ -1,0 +1,30 @@
+cpunodebind  
+
+Run a process on CPUs on a specific NUMA node. This does not isolate cores at the kernel level. You can pass the following parameter in your systemd unit file. Example below is for httpd. 
+
+cat /usr/lib/systemd/system/httpd.service | grep ExecStart 
+ 
+ExecStart=/usr/bin/numactl --cpunodebind=0 /usr/sbin/httpd $OPTIONS -DFOREGROUND 
+ 
+
+ 
+
+physcpubind 
+
+Run a process on CPUs on a specific set of cores. This does not isolate cores at the kernel level. 
+
+cat /usr/lib/systemd/system/httpd.service | grep ExecStart 
+ 
+ExecStart=/usr/bin/numactl --physcpubind=0,1,2,3 /usr/sbin/httpd $OPTIONS –DFOREGROUND 
+
+ 
+
+ 
+
+membind 
+
+Run a process on memory on a specific NUMA node. You can pass the following parameter in your systemd unit file. Example below is for httpd. 
+
+cat /usr/lib/systemd/system/httpd.service | grep ExecStart 
+ 
+ExecStart=/usr/bin/numactl --cpunodebind=0 --membind=0 /usr/sbin/httpd $OPTIONS -DFOREGROUND

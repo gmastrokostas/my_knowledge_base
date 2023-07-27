@@ -1,0 +1,20 @@
+ystemd Process CPU assignment 
+
+If you have a custom process you want to dedicate specific cores to it, you will have to configure 
+its systemd file by requesting it to start with the taskset utility. See below.
+However, if you need this set of cores to be fully dedicated to this specific service you will need 
+to also isolate those cores. Otherwise, the specific process will run only on these cores plus whatever
+other processes the kernels gives to these cores. 
+
+  
+
+  
+
+[Service] 
+#In the ExecStart parameter add the following, depending the cores you want to isolate 
+ExecStart=/bin/taskset -c 0-2  /usr/sbin/httpd $OPTIONS -DFOREGROUND 
+
+  
+
+#Restart your service 
+systemctl restart httpd 
