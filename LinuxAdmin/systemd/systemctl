@@ -1,0 +1,5 @@
+systemctl --list-units --type service 
+
+systemctl list-dependencies httpd 
+
+systemctl list-dependencies --before httpd 

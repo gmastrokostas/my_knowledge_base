@@ -1,0 +1,59 @@
+A Template for a systemD service unit 
+
+  
+
+[Unit] 
+
+Description=OpenSSH server daemon 
+
+Documentation=man:sshd(8) man:sshd_config(5) 
+
+After=network.target sshd-keygen.service 
+
+Wants=sshd-keygen.service 
+
+  
+
+[Service] 
+
+EnvironmentFile=/etc/sysconfig/sshd 
+
+ExecStart=/usr/sbin/sshd -D $OPTIONS 
+
+ExecReload=/bin/kill -HUP $MAINPID 
+
+KillMode=process 
+
+Restart=on-failure 
+
+RestartSec=42s 
+
+TimeoutStartSec=10 
+
+  
+
+[Install] 
+
+WantedBy=multi-user.target 
+
+  
+
+Create a custom SystemD unit file for a new process/service 
+
+  
+
+#Generate the file 
+
+touch /etc/systemd/system/name.service 
+
+chmod 664 /etc/systemd/system/name.service 
+
+ #Populate the file, see previous section with the template 
+
+  
+
+Create a custom SystemD unit file for an existing process/service 
+
+  
+
+#Copy the original service file into /etc. The copy will override the original service 
