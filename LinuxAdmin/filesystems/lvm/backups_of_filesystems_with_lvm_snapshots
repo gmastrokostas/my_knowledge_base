@@ -1,0 +1,60 @@
+The snapshot needs to be created on the same Volume Group where the filesystem you want to backup exists. Which means you will need to have free space at the Volume Group level to create your snapshot.
+
+In my example I have a partition of 100Gigs of which
+– 22Gigs is for “/”
+– 4Gigs is for /boot
+– 2Gigs is for swap
+
+A total of 5Gigs are enough to backup my “/” filesystem.
+
+[root@mule ~]# lsblk
+NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINT
+sda 8:0 0    100G 0 disk
+├─sda1 8:1 0 4G 0 part /boot
+├─sda2 8:2 0 22G 0 part
+│ ├─rl-root 253:0 0 20G 0 lvm /
+│ └─rl-swap 253:1 0 2G 0 lvm [SWAP]
+
+[root@mule ~]# df -hT
+/dev/mapper/rl-root xfs 20G 2.3G 18G 12% 
+Commands
+
+#Create the LVM snapshot
+lvcreate --size 10G --name backup-root --snapshot /dev/mapper/rl-root
+
+
+#Create a backup of your boot. We cannot use LVM since its a none LVM filesystem
+cd /; tar -cvf boot.tar  /boot;
+
+
+#At this point…:
+#You can make any changes you want, like updating your kernel and so forth.
+
+#Rolling back your filesystem to its previous state:
+#Merge your snapshot
+
+lvconvert --merge /dev/mapper/rl_mule-root--snapshot
+
+#Restore your original boot entries and reboot
+cd /; tar -cvf boot.tar;
+reboot;
+
+#Once everything checks you can remove your snapshot.
+lvremove /dev/mapper/rl-root--backup
+
+#Informational: How to check if you already have snapshots
+
+#Self Explanatory
+[root@mule mapper]# lvscan
+  ACTIVE            '/dev/rl/swap' [<2.03 GiB] inherit
+  ACTIVE   Original '/dev/rl/root' [20.00 GiB] inherit
+  ACTIVE   Snapshot '/dev/rl/backup-root' [10.00 GiB] inherit
+
+
+# Take note of the field "Origin"
+# Take note of the field "Attr". The o in "owi" is for original. The s in "swi" is for snapshot
+[root@mule mapper]# lvs
+  LV          VG Attr       LSize  Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  backup-root rl swi-a-s--- 10.00g      root   0.01
+  root        rl owi-aos--- 20.00g
+  swap        rl -wi-ao---- <2.03g
