@@ -1,0 +1,4 @@
+The safest way to edit a systemd file for an existing service is by running the following command.
+
+systemctl edit --full httpd.service
+By default systemd files are located under /usr/lib/systemd/system/ but by using the command above a new file will be generated /etc/systemd/system/httpd.service The change will be now reflected on both files.
