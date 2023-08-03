@@ -1,0 +1,9 @@
+       product: VMXNET3 Ethernet Controller
+       logical name: ens160
+       capacity: 10Gbit/s
+       product: VMXNET3 Ethernet Controller
+       logical name: ens192
+       capacity: 10Gbit/s
+       product: VMXNET3 Ethernet Controller
+       logical name: ens224
+       capacity: 10Gbit/s
