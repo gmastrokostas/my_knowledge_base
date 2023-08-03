@@ -1,6 +1,0 @@
----
-- name: Capture config files from database-centos8
-  fetch:
-    src: "{{item.conf}}"
-    dest: "{{globalpath}}"
-  loop: "{{databasecentos8configs}}"
