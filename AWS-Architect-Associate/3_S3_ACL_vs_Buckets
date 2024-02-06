@@ -1,7 +1,0 @@
-- Buckets are private by default. In order to access it you have to provide acces on both bucket and objects
-
-- Object ACLs: You can edit individual objects public using object ACLs
-
-- Bucket Policies: You can make a bucket public using bucket policies.
-
-- HTTP: Status code when you upload a file is 200

@@ -1,8 +1,0 @@
-#PS COMMAND
-ps -eo user,pid,%cpu,%mem,cmd,stime | grep bash
-#----------------------------------------------#
-ansible   514523  0.0  0.0 /bin/bash                   Dec11
-ansible   517757  0.0  0.0 /bin/bash                   Dec11
-ansible   518544  0.0  0.0 /bin/bash                   Dec11
-ansible  1254651  0.0  0.0 /bin/bash                   Dec17
-

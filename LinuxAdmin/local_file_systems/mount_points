@@ -1,7 +1,0 @@
-#A bind mount instead takes an existing directory tree and replicates it under a different point. The directories and files in the bind mount are the same as the original. Any modification on one side is immediately reflected on the other side, since the two views show the same data.
-
-mount --bind / /mnt
-
-
-
-

@@ -1,7 +1,0 @@
-#Reject user from using specific commands
-#includedir /etc/sudoers.d
-ansible ALL  = !/usr/sbin/reboot *, \
-               !/usr/sbin/shutdown *, \
-               !/usr/bin/systemctl reboot, \
-               ! /usr/bin/systemctl poweroff
-~                                              

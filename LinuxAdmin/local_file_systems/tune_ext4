@@ -1,8 +1,0 @@
-#Journal options
-ordered: default option. Data is grouped with metadata
-writeback: best performance. Only metadata journalized. No actual data. Data loss is a danger here.
-journal: safest option
-
-#You can specify the option either in Grub or in /etc/fstab
-/dev/mapper/cs-root  /  xfs     data=writeback       0 0
-
